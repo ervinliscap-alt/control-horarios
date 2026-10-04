@@ -1,0 +1,2 @@
+# V3.3.5 corregida
+La programación referencia `personnel.id`; no exige cuenta Auth. `shifts.personnel_id` se añade y los turnos históricos vinculados se migran automáticamente. `guard_id` se conserva temporalmente para compatibilidad.
