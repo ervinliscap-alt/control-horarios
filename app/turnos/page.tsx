@@ -1,2 +1,9 @@
 import {redirect} from 'next/navigation';import {createClient} from '../../lib/supabase/server';import AppShell from '../../components/app-shell';import ShiftManager from '../../components/shift-manager'
-export default async function Page(){const s=await createClient(),{data:{user}}=await s.auth.getUser();if(!user)redirect('/login');const{data:p}=await s.from('profiles').select('full_name,role').eq('id',user.id).single();const{data:posts}=await s.from('guard_posts').select('id,name').eq('active',true).order('name');const{data:guards}=await s.from('profiles').select('id,full_name').eq('role','GUARDIA').eq('active',true).order('full_name');const{data:sh}=await s.from('shifts').select('id,guard_post_id,guard_id,starts_at,ends_at,status,profiles(full_name),guard_posts(name,sites(name,clients(name)))').order('starts_at',{ascending:false}).limit(200);return <AppShell title="Gestión de turnos" user={p?.full_name||user.email||''} role={p?.role||''}><ShiftManager posts={posts||[]} guards={guards||[]} shifts={sh||[]}/></AppShell>}
+export default async function Page(){
+ const s=await createClient(),{data:{user}}=await s.auth.getUser();if(!user)redirect('/login');
+ const{data:p}=await s.from('profiles').select('full_name,role').eq('id',user.id).single();
+ const{data:posts}=await s.from('guard_posts').select('id,name,site_id,sites(id,name,client_id,clients(id,name,active),active)').eq('active',true).order('name');
+ const{data:guards}=await s.from('profiles').select('id,full_name').eq('role','GUARDIA').eq('active',true).order('full_name');
+ const{data:sh}=await s.from('shifts').select('id,guard_post_id,guard_id,starts_at,ends_at,status,profiles(full_name),guard_posts(name,sites(name,clients(name)))').order('starts_at',{ascending:false}).limit(200);
+ return <AppShell title="Gestión de turnos" user={p?.full_name||user.email||''} role={p?.role||''}><ShiftManager posts={(posts||[]).filter((x:any)=>x.sites?.active&&x.sites?.clients?.active)} guards={guards||[]} shifts={sh||[]}/></AppShell>
+}
