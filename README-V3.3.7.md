@@ -1,0 +1,2 @@
+# V3.3.7
+Cada cajón tiene titular y el puesto una bolsa compartida de relevos. El motor 5x2 distribuye descansos entre relevos disponibles, evita superposiciones y solo completa el plan si logra 100% de cobertura.
