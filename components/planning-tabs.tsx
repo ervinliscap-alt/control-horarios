@@ -3,7 +3,7 @@ import {useState, type ReactNode} from 'react';
 
 type Tab={id:string;label:string;description:string;content:ReactNode};
 export default function PlanningTabs({tabs}:{tabs:Tab[]}){
- const [active,setActive]=useState('titulares');
+ const [active,setActive]=useState('dashboard');
  const selected=tabs.find(t=>t.id===active)||tabs[0];
  return <div>
   <div role="tablist" aria-label="Secciones de planificación" style={{display:'flex',flexWrap:'wrap',gap:8,marginBottom:18,padding:10,background:'#f5f6f8',borderRadius:12}}>
