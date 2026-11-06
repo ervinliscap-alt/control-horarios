@@ -5,6 +5,7 @@ import PostPlanner from '../../components/post-planner';
 import CoverageCalendar from '../../components/coverage-calendar';
 import ReliefPoolManager from '../../components/relief-pool-manager';
 import FutureShiftCleanup from '../../components/future-shift-cleanup';
+import SharedPoolCoordinator from '../../components/shared-pool-coordinator';
 import SharedPoolSimulator from '../../components/shared-pool-simulator';
 export default async function Page(){
  const s=await createClient(),{data:{user}}=await s.auth.getUser();if(!user)redirect('/login');
@@ -12,5 +13,5 @@ export default async function Page(){
  const {data:posts}=await s.from('guard_posts').select('id,post_code,name,coverage_hours,sites(id,name,clients(id,name))').eq('active',true).order('post_code');
  const {data:guards}=await s.from('personnel').select('id,person_code,full_name').eq('active',true).eq('personnel_type','OPERATIVO').eq('intended_role','GUARDIA').order('person_code');
  const {data:plans}=await s.from('post_plans').select('id,start_date,end_date,guard_posts(post_code,name,coverage_hours,sites(name,clients(name))),post_plan_slots(id,slot_order,start_time,duration_hours,work_days,rest_days,cycle_offset,primary_personnel_id),post_plan_relief_pool(personnel_id)').eq('active',true).order('created_at',{ascending:false});
- return <AppShell title="Planificación de cobertura" user={p?.full_name||user.email||''} role={p?.role||''}><PostPlanner posts={posts||[]} guards={guards||[]} plans={plans||[]} role={p?.role||''}/><CoverageCalendar plans={plans||[]}/><ReliefPoolManager guards={guards||[]} plans={plans||[]} role={p?.role||''}/><FutureShiftCleanup plans={plans||[]} role={p?.role||''}/><SharedPoolSimulator/></AppShell>;
+ return <AppShell title="Planificación de cobertura" user={p?.full_name||user.email||''} role={p?.role||''}><PostPlanner posts={posts||[]} guards={guards||[]} plans={plans||[]} role={p?.role||''}/><CoverageCalendar plans={plans||[]}/><ReliefPoolManager guards={guards||[]} plans={plans||[]} role={p?.role||''}/><FutureShiftCleanup plans={plans||[]} role={p?.role||''}/><SharedPoolCoordinator role={p?.role||''}/><SharedPoolSimulator/></AppShell>;
 }
