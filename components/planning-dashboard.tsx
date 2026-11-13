@@ -1,7 +1,6 @@
 'use client';
 import {useCallback,useEffect,useMemo,useState} from 'react';
 import {createClient} from '../lib/supabase/client';
-//import PlanningWeeklyGrid from './planning-weekly-grid';
 import PlanningGantt from './planning-gantt';
 
 type Row={id:string;starts_at:string;ends_at:string;status:string;personnel_id:string|null;plan_slot_id:string|null};
